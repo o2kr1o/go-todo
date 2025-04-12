@@ -5,6 +5,7 @@ import (
     "go-todo/models"
     "github.com/gin-gonic/gin"
     "net/http"
+    "os"
 )
 
 func main() {
@@ -51,5 +52,10 @@ func main() {
         c.Status(http.StatusNoContent)
     })
 
-    r.Run(":8080")
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080" // ローカル開発用デフォルト
+    }
+
+    r.Run(":" + port)
 }
