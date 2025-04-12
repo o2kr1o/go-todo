@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>TODOアプリ</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h1>TODOリスト</h1>
+  
+    <form id="todo-form">
+      <input type="text" id="new-todo" placeholder="新しいTODOを入力" required />
+      <button type="submit">追加</button>
+    </form>
+  
+    <button onclick="confirmDeleteSelected()">一括削除</button>
+  
+    <ul id="todo-list"></ul>
+  
+    <script>
+      const list = document.getElementById('todo-list');
+      const form = document.getElementById('todo-form');
+      const input = document.getElementById('new-todo');
+      let selectedTodos = new Set();
+  
+      // 一覧取得
+      async function fetchTodos() {
+        const res = await fetch('/todos');
+        const todos = await res.json();
+        list.innerHTML = '';
+  
+        todos.forEach(todo => {
+          const li = document.createElement('li');
+          li.id = `todo-${todo.ID}`;
+          if (todo.completed) {
+            li.classList.add('completed');
+          }
+  
+          // 画面表示
+          li.innerHTML = `
+            <input type="checkbox" class="select-box" onchange="toggleSelect(${todo.ID}, this.checked)" ${todo.completed ? 'checked' : ''}>
+            <span id="title-${todo.ID}">${todo.title}</span>
+            <button onclick="confirmEdit(${todo.ID}, '${todo.title.replace(/'/g, "\\'")}')">編集</button>
+            <button onclick="confirmRemove(${todo.ID})">削除</button>
+          `;
+          list.appendChild(li);
+        });
+      }
+  
+      // 登録
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+        const title = input.value.trim();
+        if (!title) return;
+        await fetch('/todos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, completed: false }),
+        });
+        input.value = '';
+        fetchTodos();
+      };
+
+      // 選択チェックボックスの管理
+      function toggleSelect(id, isChecked) {
+        if (isChecked) {
+          selectedTodos.add(id);
+        } else {
+          selectedTodos.delete(id);
+        }
+      }
+
+      // チェックボックス切り替え
+      async function toggle(id, completed) {
+        const title = document.getElementById(`title-${id}`).textContent;
+        await fetch(`/todos/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, completed }),
+        });
+        fetchTodos();
+      }
+  
+      // 削除確認
+      function confirmRemove(id) {
+        if (confirm('本当にこのTODOを削除しますか？')) {
+          remove(id);
+        }
+      }
+  
+      // 削除処理
+      async function remove(id) {
+        await fetch(`/todos/${id}`, { method: 'DELETE' });
+        fetchTodos();
+      }
+
+      // 一括削除確認
+      function confirmDeleteSelected() {
+        if (selectedTodos.size === 0) {
+          alert('削除する項目を選択してください');
+          return;
+        }
+        
+        if (confirm(`選択した${selectedTodos.size}件のTODOを本当に削除しますか？`)) {
+          deleteSelected();
+        }
+      }
+  
+      // 一括削除処理
+      async function deleteSelected() {
+        for (const id of selectedTodos) {
+          await fetch(`/todos/${id}`, { method: 'DELETE' });
+        }
+        selectedTodos.clear();
+        fetchTodos();
+      }
+  
+      // 編集確認
+      function confirmEdit(id, oldTitle) {
+        edit(id, oldTitle);
+      }
+  
+      // 編集
+      function edit(id, oldTitle) {
+        const li = document.getElementById(`todo-${id}`);
+        li.innerHTML = `
+          <input type="checkbox" disabled>
+          <input type="text" id="edit-title-${id}" value="${oldTitle}" />
+          <button onclick="save(${id})">保存</button>
+          <button onclick="fetchTodos()">キャンセル</button>
+        `;
+      }
+  
+      // 保存
+      async function save(id) {
+        const newTitle = document.getElementById(`edit-title-${id}`).value.trim();
+        if (!newTitle) return;
+        await fetch(`/todos/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: newTitle }),
+        });
+        fetchTodos();
+      }
+  
+      fetchTodos();
+    </script>
+  </body>  
+</html>
