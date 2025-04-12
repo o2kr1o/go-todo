@@ -54,7 +54,7 @@ func main() {
 
     port := os.Getenv("PORT")
     if port == "" {
-        port = "8080" // ローカル開発用デフォルト
+        port = "8080"
     }
 
     r.Run(":" + port)
