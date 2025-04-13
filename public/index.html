@@ -31,17 +31,17 @@
   
         todos.forEach(todo => {
           const li = document.createElement('li');
-          li.id = `todo-${todo.ID}`;
+          li.id = `todo-${todo.id}`;
           if (todo.completed) {
             li.classList.add('completed');
           }
   
           // 画面表示
           li.innerHTML = `
-            <input type="checkbox" class="select-box" onchange="toggleSelect(${todo.ID}, this.checked)" ${todo.completed ? 'checked' : ''}>
-            <span id="title-${todo.ID}">${todo.title}</span>
-            <button onclick="confirmEdit(${todo.ID}, '${todo.title.replace(/'/g, "\\'")}')">編集</button>
-            <button onclick="confirmRemove(${todo.ID})">削除</button>
+            <input type="checkbox" class="select-box" onchange="toggleSelect(${todo.id}, this.checked)" ${todo.completed ? 'checked' : ''}>
+            <span id="title-${todo.id}">${todo.title}</span>
+            <button onclick="confirmEdit(${todo.id}, '${todo.title.replace(/'/g, "\\'")}')">編集</button>
+            <button onclick="confirmRemove(${todo.id})">削除</button>
           `;
           list.appendChild(li);
         });

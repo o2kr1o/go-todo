@@ -19,11 +19,6 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @Summary TODO一覧取得
-// @Description すべてのTODOを取得します
-// @Produce json
-// @Success 200 {array} models.Todo
-// @Router /todos [get]
 func main() {
     db.Init()
     r := gin.Default()
@@ -84,12 +79,26 @@ func main() {
     r.Run(":" + port)
 }
 
+// GetTodos godoc
+// @Summary TODO一覧取得
+// @Description すべてのTODOを取得します
+// @Produce json
+// @Success 200 {array} models.Todo
+// @Router /todos [get]
 func getTodos(c *gin.Context) {
     var todos []models.Todo
     db.DB.Find(&todos)
     c.JSON(http.StatusOK, todos)
 }
 
+// CreateTodo godoc
+// @Summary TODOを作成
+// @Description 新しいTODOを作成します
+// @Accept json
+// @Produce json
+// @Param todo body models.Todo true "TODO情報"
+// @Success 201 {object} models.Todo
+// @Router /todos [post]
 func createTodo(c *gin.Context) {
     var todo models.Todo
     if err := c.ShouldBindJSON(&todo); err != nil {
@@ -100,6 +109,15 @@ func createTodo(c *gin.Context) {
     c.JSON(http.StatusCreated, todo)
 }
 
+// UpdateTodo godoc
+// @Summary TODOを更新
+// @Description 指定したIDのTODOを更新します
+// @Accept json
+// @Produce json
+// @Param id path int true "TODO ID"
+// @Param todo body models.Todo true "更新内容"
+// @Success 200 {object} models.Todo
+// @Router /todos/{id} [put]
 func updateTodo(c *gin.Context) {
     var todo models.Todo
     id := c.Param("id")
@@ -118,6 +136,12 @@ func updateTodo(c *gin.Context) {
     c.JSON(http.StatusOK, todo)
 }
 
+// DeleteTodo godoc
+// @Summary TODOを削除
+// @Description 指定したIDのTODOを削除します
+// @Param id path int true "TODO ID"
+// @Success 204
+// @Router /todos/{id} [delete]
 func deleteTodo(c *gin.Context) {
     id := c.Param("id")
     result := db.DB.Delete(&models.Todo{}, id)

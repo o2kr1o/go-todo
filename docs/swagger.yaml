@@ -32,6 +32,62 @@ paths:
               $ref: '#/definitions/models.Todo'
             type: array
       summary: TODO一覧取得
+    post:
+      consumes:
+      - application/json
+      description: 新しいTODOを作成します
+      parameters:
+      - description: TODO情報
+        in: body
+        name: todo
+        required: true
+        schema:
+          $ref: '#/definitions/models.Todo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Todo'
+      summary: TODOを作成
+  /todos/{id}:
+    delete:
+      description: 指定したIDのTODOを削除します
+      parameters:
+      - description: TODO ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+      summary: TODOを削除
+    put:
+      consumes:
+      - application/json
+      description: 指定したIDのTODOを更新します
+      parameters:
+      - description: TODO ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新内容
+        in: body
+        name: todo
+        required: true
+        schema:
+          $ref: '#/definitions/models.Todo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Todo'
+      summary: TODOを更新
 schemes:
 - https
 swagger: "2.0"
