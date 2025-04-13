@@ -152,8 +152,6 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "シンプルなTODO管理API",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	LeftDelim:        "{{",
-	RightDelim:       "}}",
 }
 
 func init() {
