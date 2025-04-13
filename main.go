@@ -1,16 +1,37 @@
+// @title TODO API
+// @version 1.0
+// @description シンプルなTODO管理API
+// @host go-todo-hh8n.onrender.com
+// @BasePath /
+// @schemes https
 package main
 
 import (
-    "go-todo/db"
-    "go-todo/models"
-    "github.com/gin-gonic/gin"
-    "net/http"
-    "os"
+	"go-todo/db"
+	"go-todo/models"
+	"net/http"
+	"os"
+
+	"github.com/gin-gonic/gin"
+	_ "go-todo/docs"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @Summary TODO一覧取得
+// @Description すべてのTODOを取得します
+// @Produce json
+// @Success 200 {array} models.Todo
+// @Router /todos [get]
 func main() {
     db.Init()
     r := gin.Default()
+
+    // Swagger UI用のルート
+    url := ginSwagger.URL("https://go-todo-hh8n.onrender.com/swagger/doc.json")
+    r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+
     r.Static("/static", "./public")
     r.StaticFile("/", "./public/index.html")
 
@@ -22,6 +43,13 @@ func main() {
     })
 
     // 登録
+    // @Summary TODOを登録
+    // @Description 新しいTODOを作成します
+    // @Accept json
+    // @Produce json
+    // @Param todo body models.Todo true "TODO情報"
+    // @Success 200 {object} models.Todo
+    // @Router /todos [post]
     r.POST("/todos", func(c *gin.Context) {
         var todo models.Todo
         if err := c.ShouldBindJSON(&todo); err != nil {

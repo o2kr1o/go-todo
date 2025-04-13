@@ -1,0 +1,56 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "シンプルなTODO管理API",
+        "title": "TODO API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/todos": {
+            "get": {
+                "description": "すべてのTODOを取得します",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "TODO一覧取得",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Todo"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Todo": {
+            "description": "Todoアイテムの情報",
+            "type": "object",
+            "properties": {
+                "completed": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "title": {
+                    "type": "string",
+                    "example": "買い物に行く"
+                }
+            }
+        }
+    }
+}
