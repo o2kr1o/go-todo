@@ -1,7 +1,6 @@
 basePath: /
 definitions:
   models.Todo:
-    description: Todoアイテムの情報
     properties:
       completed:
         example: false
@@ -13,7 +12,7 @@ definitions:
         example: 買い物に行く
         type: string
     type: object
-host: localhost:8080
+host: go-todo-hh8n.onrender.com
 info:
   contact: {}
   description: シンプルなTODO管理API
@@ -34,5 +33,5 @@ paths:
             type: array
       summary: TODO一覧取得
 schemes:
-- http
+- https
 swagger: "2.0"

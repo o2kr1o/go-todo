@@ -1,6 +1,6 @@
 {
     "schemes": [
-        "http"
+        "https"
     ],
     "swagger": "2.0",
     "info": {
@@ -9,7 +9,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "go-todo-hh8n.onrender.com",
     "basePath": "/",
     "paths": {
         "/todos": {
@@ -35,7 +35,6 @@
     },
     "definitions": {
         "models.Todo": {
-            "description": "Todoアイテムの情報",
             "type": "object",
             "properties": {
                 "completed": {

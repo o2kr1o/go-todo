@@ -38,7 +38,6 @@ const docTemplate = `{
     },
     "definitions": {
         "models.Todo": {
-            "description": "Todoアイテムの情報",
             "type": "object",
             "properties": {
                 "completed": {
@@ -61,9 +60,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "go-todo-hh8n.onrender.com",
 	BasePath:         "/",
-	Schemes:          []string{"http"},
+	Schemes:          []string{"https"},
 	Title:            "TODO API",
 	Description:      "シンプルなTODO管理API",
 	InfoInstanceName: "swagger",
